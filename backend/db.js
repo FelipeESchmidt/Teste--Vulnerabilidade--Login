@@ -7,4 +7,5 @@ function BancoDeDados(){
     }
 
 }
+
 module.exports = new BancoDeDados();

