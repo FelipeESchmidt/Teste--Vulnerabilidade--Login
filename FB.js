@@ -1,10 +1,13 @@
+adicionarSenha(0,'admin');  //Inicio
+// adicionarSenha(0,'admin');  //Meio
+// adicionarSenha(0,'admin');  //Fim
+
 const dicionario = {
     logins: ['UsuarioX'],
-    senhas: ['adm', '123', '1234', '12345', 'administrador', 'admin']
+    senhas: senhas
 };
 
 let data = {};
-let find = {};
 
 const base = 'localhost';
 const urlAlvo = `http://${base}:4343/login`;
