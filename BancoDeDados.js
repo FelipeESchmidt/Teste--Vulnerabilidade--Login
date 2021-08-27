@@ -1,5 +1,5 @@
 function BancoDeDados(){
-    this.loginCorreto = 'admin';
+    this.loginCorreto = 'UsuarioX';
     this.senhaCorreta = 'admin';
 
     this.tryAccessVulneravel = function ({login,senha}) {

