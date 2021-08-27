@@ -1,6 +1,6 @@
 adicionarSenha(0,'admin');  //Inicio
-// adicionarSenha(0,'admin');  //Meio
-// adicionarSenha(0,'admin');  //Fim
+// adicionarSenha(1,'admin');  //Meio
+// adicionarSenha(2,'admin');  //Fim
 
 const dicionario = {
     logins: ['UsuarioX'],
