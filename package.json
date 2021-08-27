@@ -1,8 +1,8 @@
 {
-  "name": "login_vulneravel3",
+  "name": "login_vulneravel",
   "version": "1.0.0",
   "description": "",
-  "main": "BancoDeDados.js",
+  "main": "RESTful.js",
   "dependencies": {
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
