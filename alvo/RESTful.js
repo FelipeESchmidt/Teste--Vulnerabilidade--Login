@@ -6,27 +6,33 @@ var BancoDeDados = require('./BancoDeDados');
 var app = express();
 app.use(express.json());
 
-app.use((request,response,next)=>{
-    response.header('Access-Control-Allow-Origin','http://localhost');
+app.use((request, response, next) => {
+    response.header('Access-Control-Allow-Origin', 'http://localhost');
     app.use(cors());
     next();
 });
 
-app.post("/login",function(request, response){
-    
+app.post("/login", function (request, response) {
+
     var user = request.body;
 
     console.log(user);
 
-    if(BancoDeDados.tryAccessVulneravel(user)){
-        response.status(200);
-        response.json({login:'accepted'});
-    }else{
-        response.status(401);
-        response.json({login:'refused'});
+    const finalizar = (goodLogin)=>{
+        if (goodLogin) {
+            response.status(200);
+            response.json({ login: 'accepted' });
+            response.end();
+        } else {
+            response.status(401);
+            response.json({ login: 'refused' });
+            response.end();
+        }
     }
 
-    response.end();
+    BancoDeDados.tryAccessNotVulneravel(user).then((goodLogin) => { finalizar(goodLogin) });
+    // finalizar(BancoDeDados.tryAccessVulneravel(user));
+
 });
 
 app.listen(4343);
