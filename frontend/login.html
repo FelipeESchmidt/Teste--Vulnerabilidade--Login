@@ -91,7 +91,7 @@
         	dataType: "JSON",
 			contentType: "application/json; charset=utf-8",
 			data: data,
-			success: (res) => window.location = '/home',
+			success: (res) => window.location.replace(res.redirect),
 			error: err => {
 				let mensagemRespostaBackend = err.responseJSON.message;
 

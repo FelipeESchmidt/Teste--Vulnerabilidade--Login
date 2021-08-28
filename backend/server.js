@@ -67,9 +67,9 @@ app.post("/login", function(req, res){
     }
 
     if(dataBase.tryAccessVulneravel(user)){
-        res.login = login;
         res.status(200);
-        res.json({login:'accepted'});
+        res.header('user', login);
+        res.json({user: login, redirect: '/home'});
     }else{
         res.status(401);
         res.json({
@@ -82,7 +82,8 @@ app.post("/login", function(req, res){
 });
 
 app.get('/home', (req, res, next) => {
-    return res.send(`Bem vindo ao painel Administrativo`)
+    const user = req.headers.user; // Esquece isso, estava tentando passar o user pelo header
+    return res.send(`Bem vindo ao painel Administrativo ${user || ''}`)
 });
 
 app.listen(PORT, () => {
