@@ -10,7 +10,7 @@
 		<link href="login_files/bootstrap.min.css" id="bootstrap-style" rel="stylesheet" type="text/css">
 
 		<link href="login_files/app.min.css" id="app-style" rel="stylesheet" type="text/css">
-		<script src="login_files/jquery.min.js" defer></script>
+		
 </head>
 
 	<body class="authentication-bg">
@@ -27,10 +27,12 @@
 						<div class="card">
 							
 							<div class="card-body p-4 m-3"> 
+								<!-- AQUI FICA A MENSAGEM QUE SERÁ VULNERÁVEL -->
+								<div id="flash-message" style="display: none;" > </div>
 
 								<img src="./login_files/teste.png" alt="" height="150px" class="logo logo-dark" style="text-align: center;">
-								<div class="p-2 mt-4">
-											
+								<div class="p-2 mt-4" id='auxiliar-mensagem'>
+
 									<form action="http://localhost:4343/login" id="form-login"  method="post" accept-charset="utf-8">
 	
 										<div class="form-group">
@@ -47,16 +49,62 @@
 										</div>
 		
 									</form>                                
-									<p>
-									</p><div class="float-right">
+									</br>
+
+									<div class="float-right">
 										<a href="" class="text-muted"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Esqueceu a senha?</font></font></a>
 									</div> 
-										<p></p>        
+       
 								</div>
 			
 							</div>
 						</div>
+					</div>
+				</div>
+			</div>
+		</div>
 	</body>
 
 </html>
 
+<script src="login_files/jquery.min.js"></script>
+
+<script>
+
+	$('#form-login').submit( event => {
+		event.preventDefault(); //só previnir mesmo q o submit envie pelo browser
+
+		let login = $("#login").val();
+        let senha = $("#senha").val();
+
+		let data = JSON.stringify({
+			login, 
+			senha
+		});
+
+		$.ajax({
+			url: '/login',
+			headers: {
+				'user': login
+			},
+			type: 'POST',
+        	dataType: "JSON",
+			contentType: "application/json; charset=utf-8",
+			data: data,
+			success: (res) => window.location = '/home',
+			error: err => {
+				let mensagemRespostaBackend = err.responseJSON.message;
+
+				// Aqui eu crio a div de alerta com a mensagem do backend
+				$('#flash-message')
+					.addClass('alert alert-danger text-center') //adiciona o class=""
+					.empty() //limpa a mensagem anterior, caso exista
+					.show() //troca a propriedade do display para que ela seja visível
+					.append(mensagemRespostaBackend); //adiciona a mensagem da vulnerabilidade dentro da div criada pelo jquery
+
+				console.log('[VULNERABILIDADE]: O backend forneceu o login na resposta da requisição! login: ', err.responseJSON.login)
+			}
+		});
+	});
+	
+</script>

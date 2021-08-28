@@ -6,7 +6,7 @@ const path = require('path');
 const app = express();
 const URL = 'http://localhost';
 const PORT = 4343;
-const BancoDeDados = require('./db');
+const dataBase = require('./db');
 
 app.use(express.json());
 
@@ -47,19 +47,42 @@ app.get("/ataque", (req, res, next) => {
 
 
 app.post("/login", function(req, res){
-    var user = req.body;
     
-    console.log(user);
+    console.log(req.headers['user'] || req.headers.user)
+    var user = req.body;
+    const { login, senha } = user;
+    const { vulnerabilidade } = dataBase;
 
-    if(BancoDeDados.tryAccessVulneravel(user)){
+    /** Aqui está a vulnerabilidade criada no "Banco"
+     *  Caso o login senha 'admin', a mensagem pro front end
+     *  vai ser que a senha está errada!
+     *  Isso poderia ser evitado com uma simples conjunção "ou" na frase
+     *  Ex: 'login OU senha errados!'
+     */
+    if (vulnerabilidade(login) && senha != 'admin') {
+        return res.status(401).json({
+            message: 'Senha errada!', 
+            login: login
+        });
+    }
+
+    if(dataBase.tryAccessVulneravel(user)){
+        res.login = login;
         res.status(200);
         res.json({login:'accepted'});
     }else{
         res.status(401);
-        res.json({login:'refused'});
+        res.json({
+            message: 'Login ou senha incorretos!',
+            login: login,
+        });
     }
 
     res.end();
+});
+
+app.get('/home', (req, res, next) => {
+    return res.send(`Bem vindo ao painel Administrativo`)
 });
 
 app.listen(PORT, () => {
