@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+			
+		<title> Login </title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+		<!-- Light layout Bootstrap Css -->
+		<link href="login_files/bootstrap.min.css" id="bootstrap-style" rel="stylesheet" type="text/css">
+
+		<link href="login_files/app.min.css" id="app-style" rel="stylesheet" type="text/css">
+		
+</head>
+
+	<body class="authentication-bg">
+		<div class="account-pages my-5 pt-sm-5">
+			<div class="container">
+				<div class="row">
+					<div class="col-lg-12">
+						<div class="text-center">
+						</div>
+					</div>
+				</div>
+				<div class="row align-items-center justify-content-center">
+					<div class="col-md-8 col-lg-6 col-xl-5">
+						<div class="card">
+							
+							<div class="card-body p-4 m-3"> 
+								<!-- AQUI FICA A MENSAGEM QUE SERÁ VULNERÁVEL -->
+								<div id="flash-message" style="display: none;" > </div>
+
+								<img src="./login_files/teste.png" alt="" height="150px" class="logo logo-dark" style="text-align: center;">
+								<div class="p-2 mt-4" id='auxiliar-mensagem'>
+
+									<form action="http://localhost:4343/login" id="form-login"  method="post" accept-charset="utf-8">
+	
+										<div class="form-group">
+											<label for="login"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Nome do usuário</font></font></label>
+											<input type="text" class="form-control" id="login" name="login" placeholder="Insira um nome de usuário" required="">
+										</div>
+											
+										<div class="form-group"> 
+											<label for="senha"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Senha</font></font></label>
+											<input type="password" class="form-control" id="senha" name="senha" placeholder="Digite a senha" required="">
+										</div>
+										<div class="mt-3">
+											<button class="btn btn-large btn-block btn-primary" type="submit"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Entrar</font></font></button>
+										</div>
+		
+									</form>                                
+									</br>
+
+									<div class="float-right">
+										<a href="" class="text-muted"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Esqueceu a senha?</font></font></a>
+									</div> 
+       
+								</div>
+			
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+
+</html>
+
+<script src="login_files/jquery.min.js"></script>
+
+<script>
+
+	$('#form-login').submit( event => {
+		event.preventDefault(); //só previnir mesmo q o submit envie pelo browser
+
+		let login = $("#login").val();
+        let senha = $("#senha").val();
+
+		let data = JSON.stringify({
+			login, 
+			senha
+		});
+
+		$.ajax({
+			url: '/login',
+			headers: {
+				'user': login
+			},
+			type: 'POST',
+        	dataType: "JSON",
+			contentType: "application/json; charset=utf-8",
+			data: data,
+			success: (res) => window.location.replace(res.redirect),
+			error: err => {
+				let mensagemRespostaBackend = err.responseJSON.message;
+
+				// Aqui eu crio a div de alerta com a mensagem do backend
+				$('#flash-message')
+					.addClass('alert alert-danger text-center') //adiciona o class=""
+					.empty() //limpa a mensagem anterior, caso exista
+					.show() //troca a propriedade do display para que ela seja visível
+					.append(mensagemRespostaBackend); //adiciona a mensagem da vulnerabilidade dentro da div criada pelo jquery
+
+				console.log('[VULNERABILIDADE]: O backend forneceu o login na resposta da requisição! login: ', err.responseJSON.login)
+			}
+		});
+	});
+	
+</script>

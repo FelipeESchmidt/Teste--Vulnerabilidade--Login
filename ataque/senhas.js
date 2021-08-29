@@ -4,10 +4,10 @@ function adicionarSenha(posicao,senha){
             senhas.splice(5, 0, senha);
             break;
         case 1:
-            senhas.splice(275, 0, senha);
+            senhas.splice(Math.trunc(senhas.length/2), 0, senha);
             break;
         case 2:
-            senhas.splice(550, 0, senha);
+            senhas.splice(senhas.length-1, 0, senha);
             break;
         default:
             break;

